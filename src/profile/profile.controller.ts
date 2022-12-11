@@ -1,15 +1,19 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuards } from 'src/auth/jwt-auth.guard';
-import { ChangeProfileDto } from './dto/change-profile.dto';
 import { CreateProfileDto } from './dto/create-profile.dto';
+import { Profile } from './profile.entity';
 import { ProfileService } from './profile.service';
 
+@ApiTags('Profile')
 @Controller('profile')
 export class ProfileController {
 
     constructor(private profileService : ProfileService){}
-
+    
+    @ApiOperation({summary : 'Create profile'})
+    @ApiResponse({status: 201, type: Profile})
     @UseGuards(JwtAuthGuards)
     @Post()
     @UseInterceptors(FileInterceptor('image'))
@@ -17,6 +21,8 @@ export class ProfileController {
         return this.profileService.create(dto, image);
     }
 
+    @ApiOperation({summary : 'Change profile'})
+    @ApiResponse({status: 201, type: Profile})
     @UseGuards(JwtAuthGuards)
     @Put(':id')
     @UseInterceptors(FileInterceptor('image'))
@@ -24,12 +30,24 @@ export class ProfileController {
         return this.profileService.change(id, image);
     }
 
+    @ApiOperation({summary : 'Get all profiles'})
+    @ApiResponse({status: 200, type: Profile})
     @UseGuards(JwtAuthGuards)
     @Get()
     getAll(){
         return this.profileService.getAll()
     }
 
+    @ApiOperation({summary : 'Get one profiles'})
+    @ApiResponse({status: 200, type: Profile})
+    @UseGuards(JwtAuthGuards)
+    @Get(':id')
+    getOne(@Param('id') id : number){
+        return this.profileService.getOne(id);
+    }
+
+    @ApiOperation({summary : 'delete profile'})
+    @ApiResponse({status: 200, type: Profile})
     @UseGuards(JwtAuthGuards)
     @Delete(':id')
     removeOne(@Param('id') id : number){
