@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, UseGuards, UsePipes } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuards } from 'src/auth/jwt-auth.guard';
+import { ValidationPipes } from 'src/pipes/validation-pipes';
 import { ChangeUserDto } from './dto/change-user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -14,6 +15,7 @@ export class UserController {
     @ApiOperation({summary : 'Get all users from db'})
     @ApiResponse({status: 200, type: [User]})
     @UseGuards(JwtAuthGuards)
+    @UsePipes(ValidationPipes)
     @Get()
     getAll(){
         const user = this.userService.getAllUser();
@@ -23,6 +25,7 @@ export class UserController {
     @ApiOperation({summary : 'Get one users from db'})
     @ApiResponse({status: 200, type: User})
     @UseGuards(JwtAuthGuards)
+    @UsePipes(ValidationPipes)
     @Get(':id')
     getOne(@Param('id') id : number){
         const user = this.userService.getUserById(id);
@@ -32,6 +35,7 @@ export class UserController {
     @ApiOperation({summary : 'Change one user content on db'})
     @ApiResponse({status: 201, type: User})
     @UseGuards(JwtAuthGuards)
+    @UsePipes(ValidationPipes)
     @Put(':id')
     changeOne(@Param('id') id : number, @Body() userDto : ChangeUserDto){
         const user = this.userService.changeUser(id, userDto)
@@ -41,6 +45,7 @@ export class UserController {
     @ApiOperation({summary : 'Delete one user content on db'})
     @ApiResponse({status: 200, type: User})
     @UseGuards(JwtAuthGuards)
+    @UsePipes(ValidationPipes)
     @Delete(':id')
     removeOne(@Param('id') id : number){
         const user = this.userService.remove(id)

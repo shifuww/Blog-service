@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuards } from 'src/auth/jwt-auth.guard';
+import { ValidationPipes } from 'src/pipes/validation-pipes';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { Profile } from './profile.entity';
 import { ProfileService } from './profile.service';
@@ -24,6 +25,7 @@ export class ProfileController {
     @ApiOperation({summary : 'Change profile'})
     @ApiResponse({status: 201, type: Profile})
     @UseGuards(JwtAuthGuards)
+    @UsePipes(ValidationPipes)
     @Put(':id')
     @UseInterceptors(FileInterceptor('image'))
     changeProfile(@Param('id') id: number, @UploadedFile() image){
@@ -33,6 +35,7 @@ export class ProfileController {
     @ApiOperation({summary : 'Get all profiles'})
     @ApiResponse({status: 200, type: Profile})
     @UseGuards(JwtAuthGuards)
+    @UsePipes(ValidationPipes)
     @Get()
     getAll(){
         return this.profileService.getAll()
@@ -41,6 +44,7 @@ export class ProfileController {
     @ApiOperation({summary : 'Get one profiles'})
     @ApiResponse({status: 200, type: Profile})
     @UseGuards(JwtAuthGuards)
+    @UsePipes(ValidationPipes)
     @Get(':id')
     getOne(@Param('id') id : number){
         return this.profileService.getOne(id);
@@ -49,6 +53,7 @@ export class ProfileController {
     @ApiOperation({summary : 'delete profile'})
     @ApiResponse({status: 200, type: Profile})
     @UseGuards(JwtAuthGuards)
+    @UsePipes(ValidationPipes)
     @Delete(':id')
     removeOne(@Param('id') id : number){
         return this.profileService.remove(id)
