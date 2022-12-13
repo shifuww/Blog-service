@@ -5,7 +5,7 @@ export class CreateUserDto {
     
     @IsString({message: 'must be string'})
     @ApiProperty({example: 'exampleLogin', description: 'uniq name for user'})
-    readonly login: string;
+    login: string;
 
     @IsString({message: 'must be string'})
     @Length(4, 16)

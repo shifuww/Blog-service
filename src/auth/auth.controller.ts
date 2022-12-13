@@ -13,7 +13,6 @@ export class AuthController {
 
     @ApiOperation({summary : 'Sing in to user'})
     @ApiResponse({status: 201, type: User})
-    @UsePipes(ValidationPipes)
     @Post('/login')
     login(@Body() userDto: CreateUserDto){
         return this.authService.login(userDto);
@@ -21,7 +20,6 @@ export class AuthController {
 
     @ApiOperation({summary : 'Sing up to user'})
     @ApiResponse({status: 201, type: User})
-    @UsePipes(ValidationPipes)
     @Post('/reg')
     registration(@Body() userDto: CreateUserDto){
         return this.authService.registration(userDto)

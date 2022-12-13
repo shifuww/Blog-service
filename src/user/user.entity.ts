@@ -22,5 +22,5 @@ export class User {
     post : Posts[];
 
     @OneToMany(() => Profile, (profile) => profile.users)
-    profile : Posts[];
+    profile : Profile[];
 }
